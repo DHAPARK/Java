@@ -1,0 +1,195 @@
+package resume0423Book;
+
+import java.util.Arrays;
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
+class Book {
+	String title, author;
+	int price;
+
+	public Book(String title, String author, int price) {
+		this.title = title;
+		this.author = author;
+		this.price = price;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
+	public int getPrice() {
+		return price;
+	}
+
+	public void setPrice(int price) {
+		this.price = price;
+	}
+}
+
+public class BookManager {
+	Book[] booklist;
+
+	public int getNum() {
+		Scanner sc = new Scanner(System.in);
+		System.out.print("처리할 Book의 수를 입력하세요.");
+		while (true) {
+			try {
+				int num = sc.nextInt();
+				return num;
+			} catch (InputMismatchException e) {
+				System.out.println("잘못 입력했습니다. 정수를 입력하세요.");
+				sc.next();
+			}
+		}
+	}
+
+	void printList() {
+		for (Book book : booklist) {
+			System.out.println(book.getTitle());
+		}
+	}
+
+	Book[] getBooks() {
+		Scanner sc = new Scanner(System.in);
+		int num = getNum();
+		Book[] books = new Book[num];
+		for (int i = 0; i < books.length; i++) {
+			int id = i + 1;
+			System.out.print("제목>>");
+			String title = sc.next();
+			System.out.print("저자>>");
+			String author = sc.next();
+			System.out.print("가격>>");
+			int price = sc.nextInt();
+			books[i] = new Book(title, author, price);
+		}
+		return books;
+	}
+
+	
+	void getBooksByNum(int bknum) {
+		Book book = booklist[bknum];
+		System.out.println(book.getTitle() + book.getAuthor() + book.getPrice());
+	}
+	
+	void getMaxMinPrice() {
+		int temp=0;
+		for(Book book : booklist) {
+			if(book.getPrice() > temp) {
+				temp = book.getPrice();
+			}
+		}
+		System.out.println("최고 가격 : " + temp);
+		for(Book book : booklist) {
+			if(book.getPrice() < temp) {
+				temp = book.getPrice();
+			}
+		}
+		System.out.println("최저 가격 : " + temp);
+	}
+	
+	void getAvgPriceAndMiddle() {
+		int sum=0;
+		int avg=0;
+		for(Book book : booklist) {
+			sum += book.getPrice();
+		}
+		avg = sum/booklist.length;
+		System.out.println("평균 가격 : "+avg);
+		
+		int middle = 0;
+		int priceList[] = new int[booklist.length]; 
+		for(int i=0;i<booklist.length;i++) {
+			priceList[i] = booklist[i].getPrice();
+		}
+		Arrays.sort(priceList);
+		
+		System.out.println("중위 가격 : "+priceList[booklist.length/2]);
+	}
+	
+	void getBookListByTitleOrder() {
+		String list[] = new String[booklist.length];
+		
+		for(int i=0;i<booklist.length;i++) {
+			list[i] = booklist[i].getTitle();
+		}
+		
+		Arrays.sort(list);
+		for(String booktitle : list) {
+			System.out.println(booktitle);
+		}
+	}
+	
+	Book getBookByTitle(String title) {
+		for(Book book : booklist) {
+			if (book.getTitle().equals(title)){
+				return book;
+			}
+		}
+		return null;
+	}
+	
+	
+	
+	public static void main(String[] args) {
+		BookManager bm = new BookManager();
+		Scanner sc = new Scanner(System.in);
+		while (true) {
+			System.out.println("<클래스 기반 Book 관리 프로그램>\n"
+					+ "1)	Book 입력\n"
+					+ "2)	Book 전체 리스트 보기\n"
+					+ "3)	Book 번호로 보기\n"
+					+ "4)	최고 가격,최저 가격 보기\n"
+					+ "5)	평균 가격,중위 가격 보기\n"
+					+ "6)	제목 순 정렬해서 보기\n"
+					+ "7)	제목으로 검색\n"
+					+ "0)	메인 메뉴로 돌아감(종료)\n");
+			
+			
+			int chnum = sc.nextInt();
+			switch (chnum) {
+			case 1:
+				bm.booklist = bm.getBooks();
+				break;
+			case 2:
+				bm.printList();
+				break;
+			case 3:
+				System.out.println("검색할 책의 번호를 입력하세요: ");
+				int booknum = sc.nextInt();
+				bm.getBooksByNum(booknum-1);
+				break;
+			case 4:
+				bm.getMaxMinPrice();
+				break;
+			case 5:
+				bm.getAvgPriceAndMiddle();
+				break;
+			case 6:
+				bm.getBookListByTitleOrder();
+				break;
+			case 7:
+				String title = sc.next();
+				Book bookone = bm.getBookByTitle(title);
+				System.out.println(bookone.title + bookone.getAuthor() + bookone.price);
+				break;
+			case 0:
+				System.out.println("프로그램 종료");
+				System.exit(0);
+			}
+		}
+	}
+}
