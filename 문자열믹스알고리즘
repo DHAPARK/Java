@@ -1,0 +1,93 @@
+import java.util.Scanner;
+
+public class JavaMixString {
+	//두개의 문자열을 입력 받아 이를 다양한 방법으로 섞는 알고리즘
+	//두개의 문자열을 섞다가 남는문자열은 뒤에 쭉 배치
+	//ex
+	//입력은 다음과 같은 순서
+	//문자열1
+	//문자열2
+	//간격
+	
+	// 1) 문자열 간격은 0보다 크다
+	
+	// 테스트케이스
+	// 1234ABCD
+	// 5678ab
+	// 4
+	
+	// 12345678ABCDab
+	
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		String one = sc.next();
+		String two = sc.next();
+
+		int onelen = one.length();
+		int twolen = two.length();
+		int term = sc.nextInt();
+
+		int ftOneLen = 0;
+		int ftTwoLen = 0;
+		int bkOneLen = term;
+		int bkTwoLen = term;
+
+		String onetemp = "";
+		String twotemp = "";
+		String result = "";
+		if (onelen > twolen) {
+			for (int i = 0; i < twolen; i += term) {
+				System.out.println("i : "+i);
+				System.out.println("i+term : "+(i+term));
+				System.out.println("twolen : "+twolen);
+				if ((i > twolen) || ((i+term) > twolen)) {
+					break;
+				}
+				onetemp = one.substring(ftOneLen, bkOneLen);
+				twotemp = two.substring(ftTwoLen, bkTwoLen);
+				result = result.concat(onetemp + twotemp);
+				ftOneLen += term;
+				bkOneLen += term;
+				ftTwoLen += term;
+				bkTwoLen += term;
+			}
+			result = result.concat(one.substring(ftOneLen, one.length()));
+			result = result.concat(two.substring(ftTwoLen, two.length()));
+			
+		} else if (onelen < twolen) {
+			for (int i = 0; i < onelen; i += term) {
+				if ((i > onelen) || ((i+term) > onelen)) {
+					result = result.concat(one.substring(ftOneLen, one.length()));
+					break;
+				}else {
+					onetemp = one.substring(ftOneLen, bkOneLen);
+					twotemp = two.substring(ftTwoLen, bkTwoLen);
+					result = result.concat(onetemp + twotemp);
+					ftOneLen += term;
+					bkOneLen += term;
+					ftTwoLen += term;
+					bkTwoLen += term;	
+				}
+			}
+			result = result.concat(two.substring(ftTwoLen, two.length()));
+			
+		} else if (onelen == twolen) {
+			for (int i = 0; i < onelen; i += term) {
+				if ((i > onelen) || ((i+term) > onelen))
+					break;
+				onetemp = one.substring(ftOneLen, bkOneLen);
+				twotemp = two.substring(ftTwoLen, bkTwoLen);
+				result = result.concat(onetemp + twotemp);
+				ftOneLen += term;
+				bkOneLen += term;
+				ftTwoLen += term;
+				bkTwoLen += term;
+			}
+			result = result.concat(one.substring(ftOneLen, one.length()));
+			result = result.concat(two.substring(ftTwoLen, two.length()));
+
+		}
+
+		System.out.println(result);
+	}
+}
